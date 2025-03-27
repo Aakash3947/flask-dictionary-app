@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 70%;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            border: 1px solid #ccc;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dictionary App</h1>
+    
+    <form method="POST">
+        <input type="text" name="word" placeholder="Enter a word" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if word_data %}
+        {% if word_data.error %}
+            <p>{{ word_data.error }}</p>
+        {% else %}
+            <div class="result">
+                <h2>Word: {{ word_data.word }}</h2>
+
+                {% for meaning in word_data.meanings %}
+                    <h3>Part of Speech: {{ meaning.partOfSpeech }}</h3>
+
+                    {% for definition in meaning.definitions %}
+                        <p>Definition: {{ definition.definition }}</p>
+                        {% if definition.example %}
+                            <p><strong>Example:</strong> {{ definition.example }}</p>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if meaning.synonyms %}
+                        <p><strong>Synonyms:</strong> {{ meaning.synonyms | join(", ") }}</p>
+                    {% endif %}
+                    
+                    {% if meaning.antonyms %}
+                        <p><strong>Antonyms:</strong> {{ meaning.antonyms | join(", ") }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+</body>
+</html>
